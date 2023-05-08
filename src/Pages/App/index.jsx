@@ -5,9 +5,8 @@ import MyOrder from "../MyOrder";
 import MyOrders from "../MyOrders";
 import NotFound from "../NotFound";
 import SignIn from "../SignIn";
-import Navbar from "../../Components/Navbar.jsx";
-import Layout from "../../Components/Layout/index.jsx";
-import {AppDataProvider} from "../../Context/index.jsx";
+import Layout from "../../Components/Layout/index";
+import {AppProvider} from "../../AppContext/AppContext";
 
 const AppRoutes = () => {
     let routes = useRoutes([
@@ -23,13 +22,13 @@ const AppRoutes = () => {
 
 function App() {
     return (
-        <AppDataProvider>
+        <AppProvider>
             <BrowserRouter>
                 <Layout>
                     <AppRoutes/>
                 </Layout>
             </BrowserRouter>
-        </AppDataProvider>
+        </AppProvider>
     )
 }
 
