@@ -1,13 +1,13 @@
 import {NavLink} from "react-router-dom";
-import {useContext} from "react";
-import {AppContext} from "../Context/index.jsx";
+import useApp from "../AppContext/AppContext.jsx";
+import actionTypes from "../actions/types.js";
 
 const activeClass = "text-gray-600 underline"
-const normalClass = "text-gray-500"
+const normalClass = "text-gray-500 cursor-pointer"
 const Navbar = () => {
-    const context = useContext(AppContext);
+    const {cartCount,isCheckoutSideMenuOpen, dispatch} = useApp()
     return (
-        <nav className="flex justify-between items-center font-light px-5 py-4">
+        <nav className="flex justify-between items-center font-light px-5 py-4 sticky top-0 bg-white z-10">
             <ul className="flex justify-between items-center gap-3">
                 <li>
                     <NavLink
@@ -90,15 +90,11 @@ const Navbar = () => {
                         singin
                     </NavLink>
                 </li>
-                <li>
-                    <NavLink
-                        to="/cart"
-                        className={({isActive, isPending}) =>
-                            isPending ? "pending" : isActive ? activeClass : normalClass
-                        }
-                    >
-                        🛒 {context.shoppingCart}
-                    </NavLink>
+                <li
+                    onClick={() => dispatch({type: actionTypes.IS_CHECK_OUT_SIDE_MENU_OPEN, payload: !isCheckoutSideMenuOpen})}
+                    className={normalClass}
+                >
+                    🛒 {cartCount}
                 </li>
             </ul>
         </nav>
