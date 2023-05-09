@@ -7,6 +7,30 @@ const AppContext = createContext(initialState);
 export const AppProvider = ({children}) => {
     const [state, dispatch] = useReducer(AppReducer, initialState);
 
+    const addOrder = () => {
+        const order = {
+            date: new Date(),
+            products: state.cartProducts,
+            totalProducts: state.cartCount,
+            totalPrice: state.totalPrice
+        }
+        dispatch({
+            type: actionTypes.ORDER,
+            payload: [...state.order, order]
+        })
+        dispatch({
+            type: actionTypes.CART_PRODUCTS,
+            payload: []
+        })
+        dispatch({
+            type: actionTypes.CART_COUNT,
+            payload: 0
+        })
+        dispatch({
+            type: actionTypes.TOTAL_PRICE,
+            payload: 0
+        })
+    }
     const addToCart = (product) => {
         let numberProducts = 1
         let updatedCart = []
@@ -14,7 +38,7 @@ export const AppProvider = ({children}) => {
         const existsProduct = state.cartProducts.find(
             (currentProduct) => currentProduct.id === product.id
         );
-        if(existsProduct){
+        if (existsProduct) {
             numberProducts = existsProduct.numberProducts + 1
             updatedCart = state.cartProducts.filter(
                 (currentProduct) => currentProduct.id !== product.id
@@ -51,12 +75,22 @@ export const AppProvider = ({children}) => {
         });
     };
 
+    /**
+     * Calculates total price
+     * @param {Object[]} products
+     * @param {number} products[].price
+     * @returns {number} total price
+     */
+    const totalPrice = (products) => products
+        .reduce((total, product) => (
+            total += product.price * product.numberProducts),
+            0
+        )
     const updatePrice = (products) => {
-        let total = 0;
-        products.forEach((product) => (total += product.price * product.numberProducts));
+        let total = totalPrice(products)
 
         dispatch({
-            type: actionTypes.UPDATE_PRICE,
+            type: actionTypes.TOTAL_PRICE,
             payload: total
         });
     };
@@ -64,11 +98,12 @@ export const AppProvider = ({children}) => {
         ...state,
         dispatch,
         addToCart,
-        removeFromCart
+        removeFromCart,
+        addOrder
     };
     return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }
-const useApp= () => {
+const useApp = () => {
     const context = useContext(AppContext);
 
     if (context === undefined) {

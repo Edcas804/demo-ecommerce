@@ -6,42 +6,11 @@ export const initialState = {
     productVisibleInDetail: {},
     isCheckoutSideMenuOpen: false,
     cartProducts: [],
-    updatePrice: 0,
+    totalPrice: 0,
+    order: [],
     total: 0,
     products: []
 };
-
-
-const AppReducer_bk = (state, action) => {
-    const {type, payload} = action;
-
-    switch (type) {
-        case "ADD_TO_CART":
-            console.log("ADD_TO_CART", payload);
-
-            return {
-                ...state,
-                products: payload.products
-            };
-        case "REMOVE_FROM_CART":
-            console.log("REMOVE_FROM_CART", payload);
-
-            return {
-                ...state,
-                products: payload.products
-            };
-        case "UPDATE_PRICE":
-            console.log("UPDATE_PRICE", payload);
-
-            return {
-                ...state,
-                total: payload.total
-            };
-        default:
-            throw new Error(`No case for type ${type} found in shopReducer.`);
-    }
-};
-
 const reducerMap = (state, payload) => ({
     [actionTypes.CART_COUNT]: {
         ...state,
@@ -63,10 +32,18 @@ const reducerMap = (state, payload) => ({
         ...state,
         cartProducts: payload
     },
-    [actionTypes.UPDATE_PRICE]: {
+    [actionTypes.TOTAL_PRICE]: {
         ...state,
-        updatePrice: payload
-    }
+        totalPrice: payload
+    },
+    [actionTypes.ORDER]: {
+        ...state,
+        order: payload
+    },
+    [actionTypes.ORDERS]: {
+        ...state,
+        orders: payload
+    },
 })
 
 export const AppReducer = (state = initialState, action) => {
