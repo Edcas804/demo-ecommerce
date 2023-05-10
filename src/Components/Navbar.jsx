@@ -5,31 +5,34 @@ import actionTypes from "../actions/types.js";
 const activeClass = "text-gray-600 underline"
 const normalClass = "text-gray-500 cursor-pointer"
 const Navbar = () => {
-    const {cartCount,isCheckoutSideMenuOpen, dispatch} = useApp()
+    const {cartCount,isCheckoutSideMenuOpen, searchCategory, dispatch} = useApp()
     return (
         <nav className="flex justify-between items-center font-light px-5 py-4 sticky top-0 bg-white z-10">
             <ul className="flex justify-between items-center gap-3">
                 <li>
                     <NavLink
+                        onClick={() => dispatch({type: actionTypes.SEARCH_CATEGOGRY, payload: ''})}
                         to="/"
                         className='text-gray-500 font-bold'
 
                     >
-                        Shopi
+                        Online Store
                     </NavLink>
                 </li>
                 <li>
                     <NavLink
-                        to="/all"
+                        onClick={() => dispatch({type: actionTypes.SEARCH_CATEGOGRY, payload: 'Clothes'})}
+                        to="/clothes"
                         className={({isActive, isPending}) =>
                             isPending ? "pending" : isActive ? activeClass : normalClass
                         }
                     >
-                        All
+                        Clothes
                     </NavLink>
                 </li>
                 <li>
                     <NavLink
+                        onClick={() => dispatch({type: actionTypes.SEARCH_CATEGOGRY, payload: 'Electronics'})}
                         to="/electronics"
                         className={({isActive, isPending}) =>
                             isPending ? "pending" : isActive ? activeClass : normalClass
@@ -40,14 +43,27 @@ const Navbar = () => {
                 </li>
                 <li>
                     <NavLink
-                        to="/toys"
+                        onClick={() => dispatch({type: actionTypes.SEARCH_CATEGOGRY, payload: 'Furniture'})}
+                        to="/furniture"
                         className={({isActive, isPending}) =>
                             isPending ? "pending" : isActive ? activeClass : normalClass
                         }
                     >
-                        Toys
+                        Furniture
                     </NavLink>
                 </li>
+                <li>
+                    <NavLink
+                        onClick={() => dispatch({type: actionTypes.SEARCH_CATEGOGRY, payload: 'Other'})}
+                        to="/others"
+                        className={({isActive, isPending}) =>
+                            isPending ? "pending" : isActive ? activeClass : normalClass
+                        }
+                    >
+                        Others
+                    </NavLink>
+                </li>
+
             </ul>
             <ul className="flex justify-between items-center gap-3">
                 <li>
@@ -58,16 +74,6 @@ const Navbar = () => {
                         }
                     >
                         my
-                    </NavLink>
-                </li>
-                <li>
-                    <NavLink
-                        to="/my-order"
-                        className={({isActive, isPending}) =>
-                            isPending ? "pending" : isActive ? activeClass : normalClass
-                        }
-                    >
-                        order
                     </NavLink>
                 </li>
                 <li>

@@ -1,11 +1,14 @@
-import {createContext, useContext, useReducer, useEffect} from "react";
+import {createContext, useContext, useReducer, useEffect, useState} from "react";
 import AppReducer, {initialState} from "../AppReducer/AppReducer";
 import actionTypes from "../actions/types.js";
+import {useActionData} from "react-router-dom";
 
 const AppContext = createContext(initialState);
 
 export const AppProvider = ({children}) => {
     const [state, dispatch] = useReducer(AppReducer, initialState);
+    const [items, setItems] = useState(null)
+    const [allProducts, setAllProducts] = useState(null);
 
     const addOrder = () => {
         const order = {
@@ -86,6 +89,13 @@ export const AppProvider = ({children}) => {
             total += product.price * product.numberProducts),
             0
         )
+
+    const filteredItemsByTitle = (toSearch, searchByTitle) => {
+        return toSearch?.filter(item => item.title.toLowerCase().includes(searchByTitle.toLowerCase()))
+    }
+    const filteredItemsByCategory = (toSearch, searchByCategory) => {
+        return toSearch?.filter(item => item.category.name.toLowerCase().includes(searchByCategory.toLowerCase()))
+    }
     const updatePrice = (products) => {
         let total = totalPrice(products)
 
@@ -94,9 +104,31 @@ export const AppProvider = ({children}) => {
             payload: total
         });
     };
+
+    const searchItems = (type, search) => {
+
+    }
+    useEffect(() => {
+        fetch('https://api.escuelajs.co/api/v1/products')
+            .then(response => response.json())
+            .then(data => setAllProducts(data))
+    }, [])
+
+    useEffect(() => {
+        if(state.searchCategory.trim() && !state.search.trim()) {
+            setItems(filteredItemsByCategory(allProducts, state.searchCategory))
+        }else if(state.search.trim() && !state.searchCategory.trim()){
+            setItems(filteredItemsByTitle(allProducts, state.search))
+        }else if(state.search.trim() && state.searchCategory.trim()){
+            setItems(filteredItemsByCategory(allProducts, state.searchCategory).filter(item => item.title.toLowerCase().includes(state.search.toLowerCase())))
+        }else{
+            setItems(allProducts)
+        }
+    }, [state.search, state.searchCategory, allProducts])
     const value = {
         ...state,
         dispatch,
+        items,
         addToCart,
         removeFromCart,
         addOrder

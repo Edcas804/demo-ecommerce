@@ -7,6 +7,8 @@ const actionTypes = {
     TOTAL_PRICE: 'TOTAL_PRICE',
     ORDER: 'ORDER',
     ORDERS: 'ORDERS',
+    SEARCH: 'SEARCH',
+    SEARCH_CATEGOGRY: 'SEARCH_CATEGOGRY',
 
 }
 
