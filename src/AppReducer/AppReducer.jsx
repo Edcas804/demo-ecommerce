@@ -9,7 +9,9 @@ export const initialState = {
     totalPrice: 0,
     order: [],
     total: 0,
-    products: []
+    products: [],
+    search: '',
+    searchCategory: ''
 };
 const reducerMap = (state, payload) => ({
     [actionTypes.CART_COUNT]: {
@@ -43,6 +45,14 @@ const reducerMap = (state, payload) => ({
     [actionTypes.ORDERS]: {
         ...state,
         orders: payload
+    },
+    [actionTypes.SEARCH]: {
+        ...state,
+        search: payload
+    },
+    [actionTypes.SEARCH_CATEGOGRY]: {
+        ...state,
+        searchCategory: payload
     },
 })
 
